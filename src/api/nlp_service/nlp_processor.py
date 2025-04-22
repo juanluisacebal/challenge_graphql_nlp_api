@@ -27,7 +27,6 @@ class NLPProcessor:
         - desc_ga_nombre_producto: Nombre del producto
         - fc_visualizaciones_pag_cant: Cantidad de visualizaciones de página
         - flag_pipol: Flag PIPOL
-        - sasasa: Campo SASASA
         - id_ga_producto: ID de producto
         - desc_ga_nombre_producto_1: Nombre del producto 1
         - desc_ga_sku_producto_1: SKU del producto 1
@@ -36,6 +35,7 @@ class NLPProcessor:
         - desc_categoria_producto: Categoría del producto
         - desc_categoria_prod_principal: Categoría principal del producto
         """
+#        - sasasa: Campo SASASA
 
     async def process_query(self, query: str, db: Session) -> Dict:
         """

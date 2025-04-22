@@ -21,7 +21,7 @@ class ChallengeData(Base):
     desc_ga_nombre_producto = Column(Float, nullable=True)
     fc_visualizaciones_pag_cant = Column(Float, nullable=True)
     flag_pipol = Column(Integer, nullable=True)
-    sasasa = Column(Text, nullable=True)
+    #sasasa = Column(Text, nullable=True)
     id_ga_producto = Column(Integer, nullable=True)
     desc_ga_nombre_producto_1 = Column(Text, nullable=True)
     desc_ga_sku_producto_1 = Column(Text, nullable=True)

@@ -14,7 +14,7 @@ type DataPoint {
     descGaNombreProducto: Float
     fcVisualizacionesPagCant: Float
     flagPipol: Int
-    SASASA: String
+    #SASASA: String
     idGaProducto: Int
     descGaNombreProducto1: String
     descGaSkuProducto1: String

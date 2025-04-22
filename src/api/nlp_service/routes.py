@@ -31,7 +31,7 @@ class DataPoint(BaseModel):
     desc_ga_nombre_producto: Optional[float] = None
     fc_visualizaciones_pag_cant: Optional[float] = None
     flag_pipol: Optional[int] = None
-    sasasa: Optional[str] = None
+    #sasasa: Optional[str] = None
     id_ga_producto: Optional[int] = None
     desc_ga_nombre_producto_1: Optional[str] = None
     desc_ga_sku_producto_1: Optional[str] = None
