@@ -58,14 +58,13 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
         # Verificar el token
         token_info = keycloak_openid.decode_token(
             token,
-            keycloak_openid.public_key(),
-            options={"verify_signature": True, "verify_aud": True, "verify_exp": True}
+            keycloak_openid.public_key()
         )
 
-        if token_info.get("aud") != KEYCLOAK_CLIENT_ID:
+        if token_info.get("aud") != "account" or token_info.get("azp") != KEYCLOAK_CLIENT_ID:
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid audience in token"
+                status_code=401,
+                detail="Audiencia o parte autorizada inválida en el token"
             )
 
         if token_info is None:

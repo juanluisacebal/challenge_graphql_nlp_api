@@ -1,0 +1,35 @@
+type DataPoint {
+    idTieFechaValor: Int
+    idCliCliente: Int
+    idGaVista: Int
+    idGaTipoDispositivo: Int
+    idGaFuenteMedio: Int
+    descGaSkuProducto: String
+    descGaCategoriaProducto: Float
+    fcAgregadoCarritoCant: Int
+    fcIngresoProductoMonto: Float
+    fcRetiradoCarritoCant: Float
+    fcDetalleProductoCant: Int
+    fcProductoCant: Int
+    descGaNombreProducto: Float
+    fcVisualizacionesPagCant: Float
+    flagPipol: Int
+    SASASA: String
+    idGaProducto: Int
+    descGaNombreProducto1: String
+    descGaSkuProducto1: String
+    descGaMarcaProducto: String
+    descGaCodProducto: Float
+    descCategoriaProducto: String
+    descCategoriaProdPrincipal: String
+}
+
+type Query {
+    getDataPoints(
+        category: String
+        startDate: String
+        endDate: String
+    ): [DataPoint!]!
+    
+    getDataPoint(idTieFechaValor: Int!): DataPoint
+} 
