@@ -9,6 +9,12 @@ from ...core.models import ChallengeData
 from ...core.auth import get_current_user
 
 @strawberry.type
+class Category:
+    path: str
+    name: str
+    children: List['Category']
+
+@strawberry.type
 class DataPoint:
     id_tie_fecha_valor: Optional[int] = None
     id_cli_cliente: Optional[int] = None
@@ -37,6 +43,39 @@ class DataPoint:
 @strawberry.type
 class Query:
     @strawberry.field
+    async def categories(self, info) -> List[Category]:
+        # Verificar autenticación
+        await get_current_user(info.context["request"])
+        
+        db: Session = next(get_db())
+        try:
+            # Obtener todos los productos para construir el árbol de categorías
+            products = db.query(ChallengeData).all()
+            
+            # Construir el árbol de categorías
+            category_map = {}
+            root = Category(path="", name="root", children=[])
+            category_map[""] = root
+            
+            for product in products:
+                for path in product.category_paths:
+                    parts = path.split('/')
+                    current_path = ""
+                    
+                    for part in parts:
+                        parent_path = current_path
+                        current_path = f"{current_path}/{part}" if current_path else part
+                        
+                        if current_path not in category_map:
+                            category = Category(path=current_path, name=part, children=[])
+                            category_map[current_path] = category
+                            category_map[parent_path].children.append(category)
+            
+            return root.children
+        except Exception as e:
+            raise Exception(str(e))
+
+    @strawberry.field
     async def get_data_points(
         self,
         info,
@@ -52,7 +91,9 @@ class Query:
             query = db.query(ChallengeData)
             
             if category:
-                query = query.filter(ChallengeData.desc_categoria_producto == category)
+                query = query.filter(
+                    ChallengeData.desc_categoria_producto.like(f"%{category}%")
+                )
             
             if start_date:
                 query = query.filter(ChallengeData.id_tie_fecha_valor >= start_date)

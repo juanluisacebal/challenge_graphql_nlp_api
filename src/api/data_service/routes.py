@@ -38,6 +38,55 @@ class DataPoint(BaseModel):
     class Config:
         orm_mode = True
 
+class CategoryResponse(BaseModel):
+    path: str
+    name: str
+    children: List['CategoryResponse'] = []
+
+    class Config:
+        orm_mode = True
+
+@router.get("/categories", response_model=List[CategoryResponse])
+async def get_categories(
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Obtiene la estructura jerárquica de categorías.
+    
+    Args:
+        db: Sesión de la base de datos
+        current_user: Usuario autenticado
+    
+    Returns:
+        List[CategoryResponse]: Lista de categorías con su estructura jerárquica
+    """
+    try:
+        # Obtener todos los productos para construir el árbol de categorías
+        products = db.query(ChallengeData).all()
+        
+        # Construir el árbol de categorías
+        root = CategoryResponse(path="", name="root", children=[])
+        category_map = {"": root}
+        
+        for product in products:
+            for path in product.category_paths:
+                parts = path.split('/')
+                current_path = ""
+                
+                for part in parts:
+                    parent_path = current_path
+                    current_path = f"{current_path}/{part}" if current_path else part
+                    
+                    if current_path not in category_map:
+                        category = CategoryResponse(path=current_path, name=part, children=[])
+                        category_map[current_path] = category
+                        category_map[parent_path].children.append(category)
+        
+        return root.children
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.get("/points", response_model=List[DataPoint])
 async def get_data_points(
     category: Optional[str] = None,
@@ -50,7 +99,7 @@ async def get_data_points(
     Obtiene puntos de datos con filtros opcionales.
     
     Args:
-        category: Filtrar por categoría
+        category: Ruta de categoría para filtrar (ej: "ropa/hombre/camisetas")
         start_date: Fecha de inicio
         end_date: Fecha de fin
         db: Sesión de la base de datos
@@ -63,7 +112,10 @@ async def get_data_points(
         query = db.query(ChallengeData)
         
         if category:
-            query = query.filter(ChallengeData.desc_categoria_producto == category)
+            # Filtrar por categoría usando la nueva estructura
+            query = query.filter(
+                ChallengeData.desc_categoria_producto.like(f"%{category}%")
+            )
         
         if start_date:
             query = query.filter(ChallengeData.id_tie_fecha_valor >= start_date)
