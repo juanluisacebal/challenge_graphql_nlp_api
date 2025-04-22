@@ -10,9 +10,9 @@ import certifi
 load_dotenv()
 
 # Configuración de Keycloak
-KEYCLOAK_URL = os.getenv("KEYCLOAK_URL", "https://auth.juanluisacebal.com")
-KEYCLOAK_REALM = os.getenv("KEYCLOAK_REALM", "challenge-realm")
-KEYCLOAK_CLIENT_ID = os.getenv("KEYCLOAK_CLIENT_ID", "challenge-api")
+KEYCLOAK_URL = os.getenv("KEYCLOAK_URL", "")
+KEYCLOAK_REALM = os.getenv("KEYCLOAK_REALM", "")
+KEYCLOAK_CLIENT_ID = os.getenv("KEYCLOAK_CLIENT_ID", "")
 KEYCLOAK_CLIENT_SECRET = os.getenv("KEYCLOAK_CLIENT_SECRET", "")
 KEYCLOAK_ALGORITHMS = ["RS256"]
 
@@ -59,12 +59,18 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
         token_info = keycloak_openid.decode_token(
             token,
             keycloak_openid.public_key(),
-            options={"verify_aud": False}
+            options={"verify_signature": True, "verify_aud": True, "verify_exp": True}
         )
-        
+
+        if token_info.get("aud") != KEYCLOAK_CLIENT_ID:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid audience in token"
+            )
+
         if token_info is None:
             raise credentials_exception
-        
+
         return token_info
     except JWTError:
         raise credentials_exception
