@@ -52,8 +52,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
             realm_name=KEYCLOAK_REALM,
             client_secret_key=KEYCLOAK_CLIENT_SECRET,
             verify=True,
-            custom_headers={"User-Agent": "challenge-api"},
-            ssl_verify=True
+            custom_headers={"User-Agent": "challenge-api"}
         )
         
         # Verificar el token
