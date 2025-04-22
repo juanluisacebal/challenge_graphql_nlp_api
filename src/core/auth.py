@@ -61,11 +61,16 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
             keycloak_openid.public_key()
         )
 
-        if token_info.get("aud") != "account" or token_info.get("azp") != KEYCLOAK_CLIENT_ID:
-            raise HTTPException(
-                status_code=401,
-                detail="Audiencia o parte autorizada inválida en el token"
-            )
+        if "preferred_username" in token_info:
+            # Autenticación por login (usuario real)
+            user = token_info["preferred_username"]
+        else:
+            # Autenticación por client credentials (cuenta de servicio)
+            if token_info.get("azp") != KEYCLOAK_CLIENT_ID:
+                raise HTTPException(
+                    status_code=401,
+                    detail="Cliente no autorizado"
+                )
 
         if token_info is None:
             raise credentials_exception
@@ -77,4 +82,4 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=str(e)
-        ) 
+        )
