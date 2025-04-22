@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from ...core.database import get_db
 from ...core.models import ChallengeData
+from ...core.auth import get_current_user
 
 router = APIRouter()
 
@@ -25,7 +26,7 @@ class DataPoint(BaseModel):
     desc_ga_nombre_producto: Optional[float] = None
     fc_visualizaciones_pag_cant: Optional[float] = None
     flag_pipol: Optional[int] = None
-    SASASA: Optional[str] = None
+    sasasa: Optional[str] = None
     id_ga_producto: Optional[int] = None
     desc_ga_nombre_producto_1: Optional[str] = None
     desc_ga_sku_producto_1: Optional[str] = None
@@ -42,7 +43,8 @@ async def get_data_points(
     category: Optional[str] = None,
     start_date: Optional[datetime] = None,
     end_date: Optional[datetime] = None,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
 ):
     """
     Obtiene puntos de datos con filtros opcionales.
@@ -52,6 +54,7 @@ async def get_data_points(
         start_date: Fecha de inicio
         end_date: Fecha de fin
         db: Sesión de la base de datos
+        current_user: Usuario autenticado
     
     Returns:
         List[DataPoint]: Lista de puntos de datos que coinciden con los filtros
@@ -75,7 +78,8 @@ async def get_data_points(
 @router.get("/points/{point_id}", response_model=DataPoint)
 async def get_data_point(
     point_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
 ):
     """
     Obtiene un punto de datos específico por ID.
@@ -83,6 +87,7 @@ async def get_data_point(
     Args:
         point_id: ID del punto de datos
         db: Sesión de la base de datos
+        current_user: Usuario autenticado
     
     Returns:
         DataPoint: El punto de datos solicitado
