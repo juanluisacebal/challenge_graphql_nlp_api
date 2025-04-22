@@ -18,18 +18,18 @@ class NLPQuery(BaseModel):
 class DataPoint(BaseModel):
     id_tie_fecha_valor: Optional[int] = None
     id_cli_cliente: Optional[int] = None
-    id_ga_vista: Optional[int] = None
-    id_ga_tipo_dispositivo: Optional[int] = None
+    #id_ga_vista: Optional[int] = None
+    #id_ga_tipo_dispositivo: Optional[int] = None
     id_ga_fuente_medio: Optional[int] = None
-    desc_ga_sku_producto: Optional[str] = None
+    #desc_ga_sku_producto: Optional[str] = None
     desc_ga_categoria_producto: Optional[float] = None
     fc_agregado_carrito_cant: Optional[int] = None
     fc_ingreso_producto_monto: Optional[float] = None
-    fc_retirado_carrito_cant: Optional[float] = None
+    #fc_retirado_carrito_cant: Optional[float] = None
     fc_detalle_producto_cant: Optional[int] = None
     fc_producto_cant: Optional[int] = None
-    desc_ga_nombre_producto: Optional[float] = None
-    fc_visualizaciones_pag_cant: Optional[float] = None
+    #desc_ga_nombre_producto: Optional[float] = None
+    #fc_visualizaciones_pag_cant: Optional[float] = None
     flag_pipol: Optional[int] = None
     #sasasa: Optional[str] = None
     id_ga_producto: Optional[int] = None
