@@ -68,15 +68,10 @@ La API estará disponible en:
 ## Estructura
 
 src/
-
 ├── api/
-
 │   ├── data_service/
-
 │   ├── graphql_service/
-
 │   └── nlp_service/
-
 └── core/
 
 
