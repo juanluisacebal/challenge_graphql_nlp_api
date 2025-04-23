@@ -68,11 +68,16 @@ La API estará disponible en:
 ## Estructura
 
 src/
+
 ├── api/
-│   ├── data_service/    # Servicios REST
-│   ├── graphql_service/ # Esquemas y resolvers
-│   └── nlp_service/     # Procesamiento NLP
-└── core/               # Lógica central y modelos
+
+│   ├── data_service/
+
+│   ├── graphql_service/
+
+│   └── nlp_service/
+
+└── core/
 
 
 ## Autenticación
