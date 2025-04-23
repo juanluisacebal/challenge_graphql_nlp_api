@@ -67,13 +67,14 @@ La API estará disponible en:
 
 ## Estructura
 
+```
 src/
 ├── api/
 │   ├── data_service/
 │   ├── graphql_service/
 │   └── nlp_service/
 └── core/
-
+```
 
 ## Autenticación
 Usa Keycloak para autenticación. Incluye el token en los headers:
