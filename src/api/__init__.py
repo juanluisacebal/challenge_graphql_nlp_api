@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from strawberry.fastapi import GraphQLRouter
 
@@ -30,10 +30,7 @@ app.include_router(data_router, prefix="/api/data", tags=["Data Service"])
 app.include_router(nlp_router, prefix="/api/nlp", tags=["NLP Service"])
 
 # GraphQL
-graphql_app = GraphQLRouter(
-    schema,
-    context_getter=lambda request: {"request": request}
-)
+graphql_app = GraphQLRouter(schema)
 app.include_router(graphql_app, prefix="/graphql", tags=["GraphQL"])
 
 @app.get("/")

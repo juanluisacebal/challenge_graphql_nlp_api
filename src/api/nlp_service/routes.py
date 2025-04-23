@@ -4,6 +4,7 @@ from typing import Optional, List
 from sqlalchemy.orm import Session
 
 from ...core.database import get_db
+from ...core.models import ChallengeData
 from ...core.auth import get_current_user
 from .nlp_processor import NLPProcessor
 

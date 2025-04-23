@@ -56,19 +56,12 @@ async def get_categories(
     
     Args:
         db: Sesión de la base de datos
-        current_user: Usuario autenticado con sus roles y permisos
+        current_user: Usuario autenticado
     
     Returns:
         List[CategoryResponse]: Lista de categorías con su estructura jerárquica
     """
     try:
-        # Verificar permisos del usuario
-        if not current_user.get("realm_access", {}).get("roles"):
-            raise HTTPException(
-                status_code=403,
-                detail="No tiene permisos para acceder a las categorías"
-            )
-
         # Obtener todos los productos para construir el árbol de categorías
         products = db.query(ChallengeData).all()
         
@@ -110,19 +103,12 @@ async def get_data_points(
         start_date: Fecha de inicio
         end_date: Fecha de fin
         db: Sesión de la base de datos
-        current_user: Usuario autenticado con sus roles y permisos
+        current_user: Usuario autenticado
     
     Returns:
         List[DataPoint]: Lista de puntos de datos que coinciden con los filtros
     """
     try:
-        # Verificar permisos del usuario
-        if not current_user.get("realm_access", {}).get("roles"):
-            raise HTTPException(
-                status_code=403,
-                detail="No tiene permisos para acceder a los datos"
-            )
-
         query = db.query(ChallengeData)
         
         if category:
@@ -151,21 +137,14 @@ async def get_data_point(
     Obtiene un punto de datos específico por ID.
     
     Args:
-        point_id: ID del punto de datos (id_tie_fecha_valor)
+        point_id: ID del punto de datos
         db: Sesión de la base de datos
-        current_user: Usuario autenticado con sus roles y permisos
+        current_user: Usuario autenticado
     
     Returns:
         DataPoint: El punto de datos solicitado
     """
     try:
-        # Verificar permisos del usuario
-        if not current_user.get("realm_access", {}).get("roles"):
-            raise HTTPException(
-                status_code=403,
-                detail="No tiene permisos para acceder a los datos"
-            )
-
         data_point = db.query(ChallengeData).filter(
             ChallengeData.id_tie_fecha_valor == point_id
         ).first()

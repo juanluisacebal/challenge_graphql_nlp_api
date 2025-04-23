@@ -2,8 +2,7 @@ import strawberry
 from typing import List, Optional
 from datetime import datetime
 from sqlalchemy.orm import Session
-from fastapi import Depends, HTTPException
-from starlette.requests import Request
+from fastapi import Depends
 
 from ...core.database import get_db
 from ...core.models import ChallengeData
@@ -45,20 +44,8 @@ class DataPoint:
 class Query:
     @strawberry.field
     async def categories(self, info) -> List[Category]:
-        # Verificar autenticación y permisos
-        request = info.context.get("request")
-        if not request:
-            raise HTTPException(
-                status_code=401,
-                detail="No se pudo obtener el contexto de la petición"
-            )
-        
-        current_user = await get_current_user(request)
-        if not current_user.get("realm_access", {}).get("roles"):
-            raise HTTPException(
-                status_code=403,
-                detail="No tiene permisos para acceder a las categorías"
-            )
+        # Verificar autenticación
+        await get_current_user(info.context["request"])
         
         db: Session = next(get_db())
         try:
@@ -87,8 +74,6 @@ class Query:
             return root.children
         except Exception as e:
             raise Exception(str(e))
-        finally:
-            db.close()
 
     @strawberry.field
     async def get_data_points(
@@ -98,20 +83,8 @@ class Query:
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None
     ) -> List[DataPoint]:
-        # Verificar autenticación y permisos
-        request = info.context.get("request")
-        if not request:
-            raise HTTPException(
-                status_code=401,
-                detail="No se pudo obtener el contexto de la petición"
-            )
-        
-        current_user = await get_current_user(request)
-        if not current_user.get("realm_access", {}).get("roles"):
-            raise HTTPException(
-                status_code=403,
-                detail="No tiene permisos para acceder a los datos"
-            )
+        # Verificar autenticación
+        await get_current_user(info.context["request"])
         
         db: Session = next(get_db())
         try:
@@ -131,8 +104,6 @@ class Query:
             return query.all()
         except Exception as e:
             raise Exception(str(e))
-        finally:
-            db.close()
 
     @strawberry.field
     async def get_data_point(
@@ -140,20 +111,8 @@ class Query:
         info,
         id_tie_fecha_valor: int
     ) -> Optional[DataPoint]:
-        # Verificar autenticación y permisos
-        request = info.context.get("request")
-        if not request:
-            raise HTTPException(
-                status_code=401,
-                detail="No se pudo obtener el contexto de la petición"
-            )
-        
-        current_user = await get_current_user(request)
-        if not current_user.get("realm_access", {}).get("roles"):
-            raise HTTPException(
-                status_code=403,
-                detail="No tiene permisos para acceder a los datos"
-            )
+        # Verificar autenticación
+        await get_current_user(info.context["request"])
         
         db: Session = next(get_db())
         try:
@@ -167,7 +126,5 @@ class Query:
             return data_point
         except Exception as e:
             raise Exception(str(e))
-        finally:
-            db.close()
 
 schema = strawberry.Schema(query=Query) 
