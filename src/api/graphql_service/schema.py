@@ -45,7 +45,7 @@ class Query:
     @strawberry.field
     async def categories(self, info) -> List[Category]:
         # Verificar autenticación
-        await get_current_user(info.context["request"])
+        #await get_current_user(info.context["request"])
         
         db: Session = next(get_db())
         try:

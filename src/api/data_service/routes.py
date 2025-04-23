@@ -70,19 +70,18 @@ async def get_categories(
         category_map = {"": root}
         
         for product in products:
-            for path in product.category_paths:
-                parts = path.split('/')
-                current_path = ""
-                
-                for part in parts:
-                    parent_path = current_path
-                    current_path = f"{current_path}/{part}" if current_path else part
-                    
-                    if current_path not in category_map:
-                        category = CategoryResponse(path=current_path, name=part, children=[])
-                        category_map[current_path] = category
-                        category_map[parent_path].children.append(category)
-        
+            if product.desc_categoria_producto:
+                paths = product.desc_categoria_producto.split(",")
+                for path in paths:
+                    parts = path.strip().split('/')
+                    current_path = ""
+                    for part in parts:
+                        parent_path = current_path
+                        current_path = f"{current_path}/{part}" if current_path else part
+                        if current_path not in category_map:
+                            category = CategoryResponse(path=current_path, name=part, children=[])
+                            category_map[current_path] = category
+                            category_map[parent_path].children.append(category)        
         return root.children
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
