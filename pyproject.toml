@@ -1,0 +1,42 @@
+[project]
+name = "challenge_graphql_nlp_api"
+version = "0.1.0"
+description = "API con servicios GraphQL y NLP para análisis de datos"
+authors = [
+    {name = "Juan Luis Acebal", email = "juanluisacebal@gmail.com"}
+]
+dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn>=0.24.0",
+    "sqlalchemy>=2.0.0",
+    "psycopg2-binary>=2.9.9",
+    "python-dotenv>=1.0.0",
+    "strawberry-graphql>=0.211.0",
+    "transformers>=4.35.0",
+    "python-jose>=3.3.0",
+    "pydantic>=2.4.0",
+    "pandas>=2.1.0",
+    "openai>=1.0.0",
+    "python-multipart>=0.0.6",
+    "httpx>=0.24.0",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "python-keycloak>=2.10.0"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3 

@@ -1,8 +1,6 @@
-from sqlalchemy import Column, Integer, Float, String, Text, DateTime, ForeignKey, Table
+from sqlalchemy import Column, Integer, Float, String, Text
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
 from typing import Optional, List
-import re
 
 Base = declarative_base()
 
